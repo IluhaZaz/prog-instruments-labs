@@ -62,3 +62,4 @@ def test_delete_good(client):
     "id": 1,
     }, cookies={"auth": token})
     assert response.status_code == 200
+    

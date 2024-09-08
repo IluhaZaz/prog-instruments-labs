@@ -41,3 +41,4 @@ async def test_make_verified():
         stmt = update(user).values(is_verified=True)
         await session.execute(stmt)
         await session.commit()
+        

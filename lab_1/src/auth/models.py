@@ -53,3 +53,4 @@ class User(SQLAlchemyBaseUserTable[int], Base):
         Boolean, default=False, nullable=False
     )
     seller_data: Mapped[Optional[dict[str, str]]] = mapped_column(JSON, default=None)
+    
