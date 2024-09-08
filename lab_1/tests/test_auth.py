@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, update
 
 from auth.models import role, user
-from conftest import client, async_session_maker
+from conftest import async_session_maker
 
 
 async def test_add_roles():

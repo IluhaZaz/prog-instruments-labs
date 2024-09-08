@@ -1,14 +1,13 @@
 import asyncio
-from typing import AsyncGenerator
-
 import pytest
+
+from typing import AsyncGenerator
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.pool import NullPool
 
 from database import get_async_session
-
 from src.config import db_test_settings as s
 from src.main import app
 from auth.models import meta_data

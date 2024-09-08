@@ -1,8 +1,3 @@
-from sqlalchemy import insert, select
-
-from conftest import async_session_maker
-
-
 def test_get_goods(client):
     response = client.get("goods/get_goods")
     assert response.status_code == 200

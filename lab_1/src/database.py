@@ -4,6 +4,7 @@ from sqlalchemy import MetaData
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
+
 meta_data = MetaData()
 
 from config import db_settings as stngs

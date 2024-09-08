@@ -3,6 +3,7 @@ from sqlalchemy import Table, Column, ForeignKey, Integer, Numeric, String, ARRA
 from auth.models import user
 from database import meta_data
 
+
 good = Table(
     "good",
     meta_data,

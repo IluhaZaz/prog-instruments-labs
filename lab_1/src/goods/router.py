@@ -2,19 +2,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select, delete, update
 from decimal import Decimal
+from fastapi_users.fastapi_users import FastAPIUsers
 
 from .schemas import GoodRead, GoodCreate
 from database import get_async_session
-from auth.models import User
 from goods.models import good
-from auth.models import user as user_table
-from auth.schemas import SellerInfo
-from auth.schemas import UserRead
 from goods.schemas import Rate, Pagination
-
-
-from fastapi_users.fastapi_users import FastAPIUsers
-
+from auth.models import user as user_table, User
+from auth.schemas import UserRead, SellerInfo
 from auth.auth_back import auth_backend
 from auth.manager import get_user_manager
 

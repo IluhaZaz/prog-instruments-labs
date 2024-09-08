@@ -2,6 +2,7 @@ from pydantic import BaseModel, conint
 from decimal import Decimal
 from typing import Optional
 
+
 class GoodCreate(BaseModel):
     name: str
     description: str
