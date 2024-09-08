@@ -51,6 +51,7 @@ def test_update_good(client):
     }, cookies={"auth": token})
     assert response.status_code == 200
 
+
 def test_delete_good(client):
     token = client.cookies.get("auth")
     response = client.delete("goods/delete_good", params={

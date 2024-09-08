@@ -16,7 +16,6 @@ SMTP_PORT = 465
 
 celery = Celery('tasks', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}')
 
-
 def get_email_template_dashboard(to: str, theme: str, content: str) -> dict[str, str]:
     email = dict()
     email['Subject'] = theme
