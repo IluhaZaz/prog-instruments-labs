@@ -7,5 +7,7 @@ from database import get_async_session
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
+    """Helper function to get user's database instance"""
+
     yield SQLAlchemyUserDatabase(session, User)
     

@@ -33,6 +33,7 @@ async def add_good(new_good: GoodCreate,
                    session: AsyncSession = Depends(get_async_session),
                    user: User = Depends(verified_users)
                    ):
+    """Route to add a good"""
     
     if user.role_id != 2:
         raise HTTPException(status_code=400, detail=
@@ -66,6 +67,11 @@ async def get_goods(session: AsyncSession = Depends(get_async_session),
                     price_l: Decimal = None,
                     price_r: Decimal = None
                     ):
+    """
+    Route to get goods
+    May filter results
+    """
+
     query = select(good)
     if name:
         query = query.where(good.c.name.ilike(name))
@@ -96,6 +102,7 @@ async def update_good(id: int,
                       price: Decimal = None,
                       amount: int = None
                     ):
+    """Route to update your good's info"""
     
     query = select(good).where(good.c.id == id)
     curr_good = await session.execute(query)
@@ -140,6 +147,7 @@ async def delete_good(id: int,
                       session: AsyncSession = Depends(get_async_session),
                       user: User = Depends(verified_users)
                       ):
+    """Route to delete your good"""
     
     query = select(good).where(good.c.id == id)
     curr_good = await session.execute(query)
@@ -171,6 +179,8 @@ async def become_seller(
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(verified_users)
                       ):
+    """After success allow you to sell goods"""
+
     user = await session.get(User, user.id)
     user.role_id = 2
     user.seller_data = your_data.model_dump()
@@ -190,6 +200,7 @@ async def rate(good_id: int,
                 session: AsyncSession = Depends(get_async_session),
                 user: User = Depends(verified_users)
     ):
+    """Route to rate someones's good and leave comment"""
 
     good_obj = await session.execute(select(good).where(good.c.id == good_id))
     good_obj = good_obj.all()[0]

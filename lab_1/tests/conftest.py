@@ -21,6 +21,8 @@ engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
 async_session_maker = async_sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
 
 async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    """Overrides db connection to test db"""
+
     async with async_session_maker() as session:
         yield session
 
@@ -29,6 +31,11 @@ app.dependency_overrides[get_async_session] = override_get_async_session
 
 @pytest.fixture(autouse=True, scope='session')
 async def prepare_database():
+    """
+    Helper function
+    Create all tables after they drop, drop them after tests passed
+    """
+
     async with engine_test.begin() as conn:
         await conn.run_sync(meta_data.drop_all)
         await conn.run_sync(meta_data.create_all)
@@ -40,6 +47,7 @@ async def prepare_database():
 @pytest.fixture(scope='session')
 def event_loop(request):
     """Create an instance of the default event loop for each test case."""
+
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
@@ -47,12 +55,16 @@ def event_loop(request):
 
 @pytest.fixture(scope='session')
 def client():
+    """Helper function for getting test client"""
+
     cl = TestClient(app)
     yield cl
 
 
 @pytest.fixture(scope='session')
 async def ac() -> AsyncGenerator[AsyncClient, None]:
+    """Helper function for getting connection to test db"""
+
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
         

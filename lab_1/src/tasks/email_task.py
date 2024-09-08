@@ -17,6 +17,8 @@ SMTP_PORT = 465
 celery = Celery('tasks', broker=f'redis://{REDIS_HOST}:{REDIS_PORT}')
 
 def get_email_template_dashboard(to: str, theme: str, content: str) -> dict[str, str]:
+    """Helper function to construct email"""
+
     email = dict()
     email['Subject'] = theme
     email['From'] = SMTP_USER
@@ -28,6 +30,8 @@ def get_email_template_dashboard(to: str, theme: str, content: str) -> dict[str,
 
 @celery.task(name='tasks.email_task.send_email_report_dashboard')
 def send_email_report_dashboard(dict_email: dict[str, str]):
+    """Function for background sending emails"""
+
     email = EmailMessage()
     email['Subject'] = dict_email['Subject']
     email['From'] = dict_email['From']

@@ -17,5 +17,7 @@ async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    """Helper function for getting access to db"""
+    
     async with async_session_maker() as session:
         yield session
