@@ -14,6 +14,7 @@ class DbSettings(BaseSettings):
 
     model_config = SettingsConfigDict()
 
+
 db_settings = DbSettings()
 
 class DbTestSettings(BaseSettings):
@@ -24,6 +25,7 @@ class DbTestSettings(BaseSettings):
     DB_USER_TEST: str|None = Field(default=None)
 
     model_config = SettingsConfigDict()
+    
 
 db_test_settings = DbTestSettings()
 

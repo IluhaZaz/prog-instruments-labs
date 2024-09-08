@@ -34,6 +34,8 @@ user = Table(
 Base: DeclarativeMeta = declarative_base()
 
 class User(SQLAlchemyBaseUserTable[int], Base):
+    """SQLAlchemy users table definition."""
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     role_id: Mapped[int] = mapped_column(Integer, ForeignKey(role.c.id))

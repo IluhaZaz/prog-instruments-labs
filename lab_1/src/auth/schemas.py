@@ -34,5 +34,7 @@ class UserUpdate(schemas.BaseUserUpdate):
 
 
 class SellerInfo(BaseModel):
+    """Model representing necessary data for becoming seller"""
+    
     full_name: str
     certificate_num: int

@@ -25,5 +25,6 @@ class Rate(BaseModel):
     
 
 class Pagination(BaseModel):
+    """Model for worhing with pagination"""
     offset: conint(ge=0) = 0
     limit: conint(ge=1, le=30) = 15

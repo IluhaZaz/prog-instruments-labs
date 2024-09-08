@@ -8,6 +8,8 @@ from tasks.email_task import send_email_report_dashboard, get_email_template_das
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
+    """User management logic"""
+    
     reset_password_token_secret = SECRET
     verification_token_secret = SECRET
 
