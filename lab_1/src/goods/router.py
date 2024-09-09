@@ -49,7 +49,9 @@ async def add_good(new_good: GoodCreate,
     await session.execute(stmt)
     await session.commit()
 
-    res = await session.execute(good.select().order_by(good.c.id.desc()).limit(1))
+    res = await session.execute(
+        good.select().order_by(good.c.id.desc()).limit(1)
+    )
     res = GoodRead.model_validate(res.first(), from_attributes=True)
 
     return {
@@ -85,7 +87,10 @@ async def get_goods(session: AsyncSession = Depends(get_async_session),
     
     res = await session.execute(query)
     res = res.all()
-    res = [GoodRead.model_validate(line, from_attributes=True).model_dump() for line in res]
+    res = [
+        GoodRead.model_validate(line, from_attributes=True).model_dump() 
+        for line in res
+    ]
     return {
         "status": "ok",
         "detail": "got goods",
@@ -190,7 +195,10 @@ async def become_seller(
     return {
                 "status": "ok",
                 "detail": "now you are a seller",
-                "data": UserRead.model_validate(user, from_attributes=True).model_dump()
+                "data": UserRead.model_validate(
+                    user, 
+                    from_attributes=True
+                    ).model_dump()
             }
 
 
@@ -224,23 +232,34 @@ async def rate(good_id: int,
     rate.good_id = good_id
     stmt = update(good).values(rate_cnt = good.c.rate_cnt + 1, 
                                rate_sum = good.c.rate_sum + rate.rate,
-                               rate = (good.c.rate_sum + rate.rate)/(good.c.rate_cnt + 1),
+                               rate = (good.c.rate_sum + rate.rate)/
+                               (good.c.rate_cnt + 1),
                                rated_by = good.c.rated_by + [user.id]
                                ).where(good.c.id == good_id)
     await session.execute(stmt)
     
     user.comments.append(rate.model_dump())
 
-    stmt = update(user_table).values(comments=user.comments).where(user_table.c.id == user.id)
+    stmt = update(
+        user_table
+        ).values(
+            comments=user.comments
+            ).where(
+                user_table.c.id == user.id
+                )
     await session.execute(stmt)
 
     await session.commit()
 
-    rated_good = await session.execute(select(good).where(good.c.id == good_id))
+    rated_good = await session.execute(
+        select(good).where(good.c.id == good_id)
+    )
     rated_good = rated_good.first()
 
     return {
                 "status": "ok",
                 "detail": "good rated",
-                "data": GoodRead.model_validate(rated_good, from_attributes=True).model_dump()
+                "data": GoodRead.model_validate(
+                    rated_good, 
+                    from_attributes=True).model_dump()
             }

@@ -1,5 +1,14 @@
 from fastapi_users.db import SQLAlchemyBaseUserTable
-from sqlalchemy import Table, Column, ForeignKey, Integer, String, Boolean, JSON, ARRAY
+from sqlalchemy import (
+    Table, 
+    Column, 
+    ForeignKey, 
+    Integer, 
+    String, 
+    Boolean, 
+    JSON, 
+    ARRAY
+    )
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import declarative_base, Mapped, mapped_column
 from typing import Optional
@@ -39,7 +48,9 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     role_id: Mapped[int] = mapped_column(Integer, ForeignKey(role.c.id))
-    comments: Mapped[list[dict]] = mapped_column(ARRAY(JSON), nullable=False, default=[])
+    comments: Mapped[list[dict]] = mapped_column(ARRAY(JSON), 
+                                                 nullable=False, 
+                                                 default=[])
 
     email: Mapped[str] = mapped_column(
         String(length=320), unique=True, index=True, nullable=False
@@ -47,12 +58,17 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     hashed_password: Mapped[str] = mapped_column(
         String(length=1024), nullable=False
     )
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    is_active: Mapped[bool] = mapped_column(
+        Boolean, default=True, nullable=False
+    )
     is_superuser: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
     is_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
-    seller_data: Mapped[Optional[dict[str, str]]] = mapped_column(JSON, default=None)
+    seller_data: Mapped[Optional[dict[str, str]]] = mapped_column(
+        JSON, 
+        default=None
+    )
     

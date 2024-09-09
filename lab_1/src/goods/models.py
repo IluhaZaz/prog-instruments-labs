@@ -1,4 +1,12 @@
-from sqlalchemy import Table, Column, ForeignKey, Integer, Numeric, String, ARRAY
+from sqlalchemy import (
+    Table, 
+    Column, 
+    ForeignKey, 
+    Integer, 
+    Numeric, 
+    String, 
+    ARRAY
+)
 
 from auth.models import user
 from database import meta_data

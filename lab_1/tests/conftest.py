@@ -4,7 +4,11 @@ import pytest
 from typing import AsyncGenerator
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import (
+    AsyncSession, 
+    create_async_engine, 
+    async_sessionmaker
+    )
 from sqlalchemy.pool import NullPool
 
 from database import get_async_session
@@ -15,10 +19,12 @@ from goods.models import meta_data
 
 
 # DATABASE
-DATABASE_URL_TEST = f"postgresql+asyncpg://{s.DB_USER_TEST}:{s.DB_PASS_TEST}@{s.DB_HOST_TEST}:{s.DB_PORT_TEST}/{s.DB_NAME_TEST}"
+DATABASE_URL_TEST = f"postgresql+asyncpg://{s.DB_USER_TEST}:" \
+f"{s.DB_PASS_TEST}@{s.DB_HOST_TEST}:{s.DB_PORT_TEST}/{s.DB_NAME_TEST}"
 
 engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
-async_session_maker = async_sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
+async_session_maker = async_sessionmaker(engine_test, class_=AsyncSession, 
+                                         expire_on_commit=False)
 
 async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
     """Overrides db connection to test db"""
@@ -46,7 +52,9 @@ async def prepare_database():
 
 @pytest.fixture(scope='session')
 def event_loop(request):
-    """Create an instance of the default event loop for each test case."""
+    """
+    Create an instance of the default event loop for each test case.
+    """
 
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop

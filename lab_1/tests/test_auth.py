@@ -13,7 +13,10 @@ async def test_add_roles():
 
         query = select(role)
         result = await session.execute(query)
-        assert result.all() == [(1, "customer", None), (2, "seller", {"sell": True})], "Role did not add"
+        assert result.all() == [
+            (1, "customer", None), 
+            (2, "seller", {"sell": True})
+            ], "Role did not add"
 
 
 def test_register(client):
@@ -31,7 +34,9 @@ def test_register(client):
 
 
 def test_auth(client):
-    response = client.post("auth/jwt/login", data={"username":"user@example.com", "password":"string"})
+    response = client.post("auth/jwt/login", 
+                           data={"username":"user@example.com", 
+                                 "password":"string"})
     assert response.status_code == 204
 
 

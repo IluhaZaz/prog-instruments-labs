@@ -5,7 +5,8 @@ def test_get_goods(client):
 
 
 def test_add_good_not_seller(client):
-    client.post("auth/jwt/login", data={"username":"user@example.com", "password":"string"})
+    client.post("auth/jwt/login", data={"username":"user@example.com", 
+                                        "password":"string"})
     token = client.cookies.get("auth")
     response = client.post("goods/add_good", json={
     "name": "string",
@@ -15,7 +16,8 @@ def test_add_good_not_seller(client):
     "seller_id": 0
     }, cookies={"auth": token})
     assert response.status_code == 400
-    assert response.text == '{"detail":{"status":"error","detail":"you need to be a seller","data":null}}'
+    assert response.text == '{"detail":{"status":"error","detail":' \
+        '"you need to be a seller","data":null}}'
 
 
 def test_become_seller(client):
