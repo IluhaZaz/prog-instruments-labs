@@ -1,7 +1,7 @@
 def test_get_goods(client):
     response = client.get("goods/get_goods")
     assert response.status_code == 200
-    assert response.text == '{"status":"ok","detail":"got goods","data":[]}'
+    assert response.text == "{'status':'ok','detail':'got goods','data':[]}"
 
 
 def test_add_good_not_seller(client):
@@ -16,8 +16,8 @@ def test_add_good_not_seller(client):
     "seller_id": 0
     }, cookies={"auth": token})
     assert response.status_code == 400
-    assert response.text == '{"detail":{"status":"error","detail":' \
-        '"you need to be a seller","data":null}}'
+    assert response.text == "{'detail':{'status':'error','detail':" \
+        "'you need to be a seller','data':null}}"
 
 
 def test_become_seller(client):
