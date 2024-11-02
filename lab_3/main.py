@@ -30,6 +30,6 @@ def process_data(path_to_patterns: str, path_to_data: str) -> list[int]:
 
     for num, line in enumerate(lines[1:]):
         if not validate(line, patterns):
-            res.append(num - 2)
+            res.append(num)
 
     return res
