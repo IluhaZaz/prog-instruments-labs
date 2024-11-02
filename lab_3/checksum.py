@@ -3,7 +3,7 @@ import hashlib
 
 from typing import List
 
-from main import res
+from main import process_data
 
 """
 В этом модуле обитают функции, необходимые для автоматизированной проверки результатов ваших трудов.
@@ -52,6 +52,7 @@ def serialize_result(variant: int, checksum: str) -> None:
 
 
 if __name__ == "__main__":
-    checksum = calculate_checksum(res)
+    nums = process_data("patterns.json", "36.csv")
+    checksum: str = calculate_checksum(nums)
 
     serialize_result(36, checksum)
