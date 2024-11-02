@@ -47,8 +47,11 @@ def serialize_result(variant: int, checksum: str) -> None:
         "checksum": checksum
         }
     
-    with open("result.json", mode="w", encoding="utf-8") as f:
-        json.dump(res, f) 
+    try:
+        with open("result.json", mode="w", encoding="utf-8") as f:
+            json.dump(res, f)
+    except Exception as e:
+        print(f"Error while opening 'result.json': {e}")
 
 
 if __name__ == "__main__":
