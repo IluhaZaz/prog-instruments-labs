@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select, delete, update
@@ -18,6 +20,8 @@ from fastapi_users.fastapi_users import FastAPIUsers
 from auth.auth_back import auth_backend
 from auth.manager import get_user_manager
 
+
+logger = logging.getLogger(__name__)
 
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
@@ -40,6 +44,10 @@ async def add_good(new_good: GoodCreate,
                    ):
     
     if user.role_id != 2:
+        extra={"event": "ADD_GOOD", 
+                "user_id": str(user.id), 
+                "data": "User is not a seller"}
+        logger.info(msg="Can't add good", extra=extra)
         raise HTTPException(status_code=400, detail=
                             {
                                 "status": "error",
@@ -56,11 +64,11 @@ async def add_good(new_good: GoodCreate,
     res = await session.execute(good.select().order_by(good.c.id.desc()).limit(1))
     res = GoodRead.model_validate(res.first(), from_attributes=True)
 
-    return {
-        "status": "ok",
-        "detail": "good added",
-        "data": res.model_dump()
-    }
+    extra={"event": "ADD_GOOD", 
+                "user_id": str(user.id), 
+                "data": res.model_dump()}
+    logger.info(msg="Good added", extra=extra)
+
 
 
 @router.get("/get_goods", response_model=dict)
@@ -85,11 +93,11 @@ async def get_goods(session: AsyncSession = Depends(get_async_session),
     res = await session.execute(query)
     res = res.all()
     res = [GoodRead.model_validate(line, from_attributes=True).model_dump() for line in res]
-    return {
-        "status": "ok",
-        "detail": "got goods",
-        "data": res
-    }
+
+    extra={"event": "GET_GOOD", 
+                "user_id": "None", 
+                "data": res}
+    logger.info(msg="Got goods", extra=extra)
 
 
 @router.patch("/update_good")
@@ -108,6 +116,10 @@ async def update_good(id: int,
     curr_good = GoodRead.model_validate(curr_good, from_attributes=True)
     
     if curr_good.seller_id != user.id:
+        extra={"event": "UPDATE_GOOD", 
+                "user_id": str(user.id), 
+                "data": "None"}
+        logger.info(msg="Not user's good", extra=extra)
         raise HTTPException(status_code=400, detail=
                             {
                                 "status": "error",
@@ -133,11 +145,10 @@ async def update_good(id: int,
     res = await session.execute(select(good).where(good.c.id == id))
     res = GoodRead.model_validate(res.first(), from_attributes=True)
 
-    return {
-        "status": "ok",
-        "detail": "good updated",
-        "data": res.model_dump()
-    }
+    extra={"event": "UPDATE_GOOD", 
+                "user_id": str(user.id), 
+                "data": res.model_dump()}
+    logger.info(msg="Got goods", extra=extra)
     
 
 @router.delete("/delete_good")
@@ -151,6 +162,10 @@ async def delete_good(id: int,
     curr_good = curr_good.all()[0]
     curr_good = GoodRead.model_validate(curr_good, from_attributes=True)
     if curr_good.seller_id != user.id:
+        extra={"event": "DELETE_GOOD", 
+                "user_id": str(user.id), 
+                "data": "None"}
+        logger.info(msg="Try to delete other seller's good", extra=extra)
         raise HTTPException(status_code=400, detail=
                             {
                                 "status": "error",
@@ -163,11 +178,10 @@ async def delete_good(id: int,
     await session.execute(stmt)
     await session.commit()
 
-    return {
-                "status": "ok",
-                "detail": "good deleted",
-                "data": curr_good.model_dump()
-            }
+    extra={"event": "DELETE_GOOD", 
+                "user_id": str(user.id), 
+                "data": "None"}
+    logger.info(msg="Good deleted", extra=extra)
 
 
 @router.post("/become_seller")
@@ -181,12 +195,11 @@ async def become_seller(
     user.seller_data = your_data.model_dump()
 
     await session.commit()
-    
-    return {
-                "status": "ok",
-                "detail": "now you are a seller",
-                "data": UserRead.model_validate(user, from_attributes=True).model_dump()
-            }
+
+    extra={"event": "BECOME_SELLER", 
+                "user_id": str(user.id), 
+                "data": "None"}
+    logger.info(msg="Became seller", extra=extra)
 
 
 @router.post("/rate")
@@ -201,6 +214,10 @@ async def rate(good_id: int,
     good_obj = GoodRead.model_validate(good_obj, from_attributes=True)
 
     if good_obj.seller_id == user.id:
+        extra={"event": "RATE_GOOD", 
+                "user_id": str(user.id), 
+                "data": good_obj.model_dump()}
+        logger.info(msg="Can't rate your good", extra=extra)
         raise HTTPException(status_code=400, detail={
                                 "status": "error",
                                 "detail": "you can't rate your good",
@@ -208,6 +225,10 @@ async def rate(good_id: int,
                             }
                             )
     if user.id in good_obj.rated_by:
+        extra={"event": "RATE_GOOD", 
+                "user_id": str(user.id), 
+                "data": good_obj.model_dump()}
+        logger.info(msg="Can't rate good twice", extra=extra)
         raise HTTPException(status_code=400, detail={
                                 "status": "error",
                                 "detail": "you can't rate good twice",
@@ -233,8 +254,7 @@ async def rate(good_id: int,
     rated_good = await session.execute(select(good).where(good.c.id == good_id))
     rated_good = rated_good.first()
 
-    return {
-                "status": "ok",
-                "detail": "good rated",
-                "data": GoodRead.model_validate(rated_good, from_attributes=True).model_dump()
-            }
+    extra={"event": "RATE_GOOD", 
+                "user_id": str(user.id), 
+                "data": GoodRead.model_validate(rated_good, from_attributes=True).model_dump()}
+    logger.info(msg="Good rated", extra=extra)
