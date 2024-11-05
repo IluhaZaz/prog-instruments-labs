@@ -1,4 +1,5 @@
 import uvicorn
+import logging
 
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
@@ -10,6 +11,12 @@ from auth.models import User
 
 from goods.router import router as router_goods
 
+
+logging.basicConfig(
+  level=logging.DEBUG,
+  format='%(asctime)s | %(name)s | %(event)s | %(user_id)s | %(message)s | %(data)s',
+  datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 app = FastAPI(title="OnlineShop")
 
@@ -45,6 +52,13 @@ app.include_router(
 app.include_router(router_goods)
 
 if __name__ == "__main__":
+    logger = logging.getLogger(__name__)
+
+    extra={"event": "APPLICATION_START", 
+           "user_id": "None", 
+           "data": "None"}
+    logger.info(msg="OnlineShop application is starting", extra=extra)
+
     uvicorn.run(
         __name__ + ":app",
         host='127.0.0.1',
