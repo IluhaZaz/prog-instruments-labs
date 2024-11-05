@@ -1,0 +1,13 @@
+fastapi[all]
+sqlalchemy
+alembic
+psycopg2
+black
+fastapi-users[sqlalchemy]
+asyncpg
+celery
+flower
+redis
+pytest
+pytest-asyncio
+gunicorn
