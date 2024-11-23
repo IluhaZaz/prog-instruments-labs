@@ -6,3 +6,6 @@ psycopg-binary
 tabulate
 alembic
 black
+pytest
+pytest-asyncio
+pytest-mock
