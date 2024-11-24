@@ -111,10 +111,13 @@ class SystemDAOAsync:
 
     @staticmethod
     async def show_users():
+        res = None
         async with async_engine.connect() as conn:
             query = select(users_table)
             res = await conn.execute(query)
+            res = res.all()
             print(tabulate(res, headers=("id", "surname", "role"), tablefmt="double_grid"))
+        return res
 
     @staticmethod
     async def update_worker_data(user_id: int, new_surname: str = None, new_role: str = None):

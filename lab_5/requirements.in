@@ -8,4 +8,3 @@ alembic
 black
 pytest
 pytest-asyncio
-pytest-mock
