@@ -23,6 +23,7 @@ class SystemDAOSync:
 
     @staticmethod
     def show_logs():
+        res = None
         with sync_engine.connect() as conn:
             query = select(log_table.c.id, 
                         log_table.c.user_id, 
@@ -36,6 +37,7 @@ class SystemDAOSync:
                                         )
             res = conn.execute(query).all()
             print(tabulate(res, headers=("id", "user_id", "surname", "role", "action", "at"), tablefmt="double_grid"))
+        return res
 
     @staticmethod
     def add_user(surname: str, role: str):
@@ -46,10 +48,12 @@ class SystemDAOSync:
 
     @staticmethod
     def show_users():
+        res = None
         with sync_engine.connect() as conn:
             query = select(users_table)
-            res = conn.execute(query)
+            res = conn.execute(query).all()
             print(tabulate(res, headers=("id", "surname", "role"), tablefmt="double_grid"))
+        return res
 
     @staticmethod
     def update_worker_data(user_id: int, new_surname: str = None, new_role: str = None):
@@ -81,6 +85,7 @@ class SystemDAOAsync:
 
     @staticmethod
     async def show_logs():
+        res = None
         async with async_engine.connect() as conn:
             query = select(log_table.c.id, 
                         log_table.c.user_id, 
@@ -95,6 +100,7 @@ class SystemDAOAsync:
             res = await conn.execute(query)
             res = res.all()
             print(tabulate(res, headers=("id", "user_id", "surname", "role", "action", "at"), tablefmt="double_grid"))
+        return res
 
     @staticmethod
     async def add_user(surname: str, role: str):
