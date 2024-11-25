@@ -1,8 +1,8 @@
 import pytest
 
-from sqlalchemy import inspect, select, insert
+from sqlalchemy import inspect, select
 
-from models.models import Role, users_table, log_table
+from models.models import users_table, log_table
 from core.dao import SystemDAOAsync
 from database import async_engine, async_session_factory
 
