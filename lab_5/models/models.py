@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 #decrarative style
-from database import Base
+from lab_5.database import Base
 
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
@@ -55,7 +55,7 @@ class UsersTable(Base):
 
 
 #imperative style
-from database import meta_data
+from lab_5.database import meta_data
 
 
 log_table = Table(

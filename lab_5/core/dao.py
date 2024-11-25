@@ -1,8 +1,8 @@
 from sqlalchemy import select, update, insert, join
 from tabulate import tabulate
 
-from database import sync_engine, async_engine, meta_data
-from models.models import log_table, users_table
+from lab_5.database import sync_engine, async_engine, meta_data
+from lab_5.models.models import log_table, users_table
 
 
 class SystemDAOSync:

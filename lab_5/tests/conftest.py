@@ -1,14 +1,15 @@
 import pytest
 import asyncio
+import os
 
 
 @pytest.fixture(autouse=True, scope='session')
 def prepare_env_file():
     new_env: str = None
-    with open(".env.test", mode="r", encoding="utf-8") as f:
+    with open("lab_5.\\.env.test", mode="r", encoding="utf-8") as f:
         new_env = f.read()
 
-    with open(".env", mode="r+", encoding="utf-8") as f:
+    with open("lab_5.\\.env", mode="r+", encoding="utf-8") as f:
         old_env  = f.read()
 
         f.seek(0)
@@ -20,7 +21,7 @@ def prepare_env_file():
 
     yield
 
-    with open(".env", mode="w", encoding="utf-8") as f:
+    with open("lab_5.\\.env", mode="w", encoding="utf-8") as f:
         f.write(old_env)
 
 @pytest.fixture(scope="session")

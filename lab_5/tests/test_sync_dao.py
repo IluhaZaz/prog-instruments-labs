@@ -2,9 +2,9 @@ import pytest
 
 from sqlalchemy import inspect, select
 
-from models.models import Role, users_table, log_table
-from core.dao import SystemDAOSync
-from database import sync_engine, sync_session_factory
+from lab_5.models.models import Role, users_table, log_table
+from lab_5.core.dao import SystemDAOSync
+from lab_5.database import sync_engine, sync_session_factory
 
 
 def test_create_tables():

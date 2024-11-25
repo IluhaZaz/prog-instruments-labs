@@ -2,8 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from tabulate import tabulate
 
-from database import sync_engine, async_engine, sync_session_factory, async_session_factory, Base
-from models.models import LogTable, Role, UsersTable
+from lab_5.database import sync_engine, async_engine, sync_session_factory, async_session_factory, Base
+from lab_5.models.models import LogTable, Role, UsersTable
 
 
 class SystemORMSync:
